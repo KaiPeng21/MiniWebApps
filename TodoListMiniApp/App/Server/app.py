@@ -103,7 +103,7 @@ class Task(Resource):
             db.session.add(signature)
             db.session.commit()
 
-            return {'Success' : True, 'Inserted-Data' : signature.toJSON()}
+            return {'Success' : True, 'InsertedData' : signature.toJSON()}
         
         return {'Success' : False, 'Message' : 'No valid data was sent from the post request'}
 
@@ -129,7 +129,7 @@ class Task(Resource):
 
         task_table = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(id=receive['id'])))
 
-        return {'Success' : True, 'Modified-Data' : task_table}
+        return {'Success' : True, 'ModifiedData' : task_table}
 
     def delete(self):
         # json received from delete request
