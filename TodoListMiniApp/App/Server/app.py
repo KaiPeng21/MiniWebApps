@@ -69,24 +69,24 @@ class Task(Resource):
         if receive is not None:
             valid_receive_dict = {key : value for key, value in receive.items() if key in TaskTable.getColumns()}
             if len(valid_receive_dict) > 0:
-                filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(**valid_receive_dict)))
-                return {'Tasks' : filtered_tasks}
+                filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(**valid_receive_dict)))[::-1]
+                return {'Tasks' : filtered_tasks}, 200
         
         if 'id' in request.values.keys():
-            filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(id=request.values['id'])))
-            return {'Tasks' : filtered_tasks}
+            filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(id=request.values['id'])))[::-1]
+            return {'Tasks' : filtered_tasks}, 200
 
         if 'complete' in request.values.keys():
             if request.values['complete'].lower() == 'true':
-                filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(complete=True)))
-                return {'Tasks' : filtered_tasks}
+                filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(complete=True)))[::-1]
+                return {'Tasks' : filtered_tasks}, 200
             elif request.values['complete'].lower() == 'false':
-                filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(complete=False)))
-                return {'Tasks' : filtered_tasks}
+                filtered_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(complete=False)))[::-1]
+                return {'Tasks' : filtered_tasks}, 200
 
         # no valid data was sent from the get request, no need to filter the data
-        all_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.all()))
-        return {'Tasks' : all_tasks}
+        all_tasks = list(map(lambda x: x.toJSON(), TaskTable.query.all()))[::-1]
+        return {'Tasks' : all_tasks}, 200
     
     # Adding Task Data To Database
     def post(self):
@@ -103,9 +103,9 @@ class Task(Resource):
             db.session.add(signature)
             db.session.commit()
 
-            return {'Success' : True, 'Inserted-Data' : signature.toJSON()}
+            return {'Success' : True, 'InsertedData' : signature.toJSON()}, 200
         
-        return {'Success' : False, 'Message' : 'No valid data was sent from the post request'}
+        return {'Success' : False, 'Message' : 'No valid data was sent from the post request'}, 200
 
     # Modifying Task Data To Database, using id as primary key
     def put(self):
@@ -113,35 +113,36 @@ class Task(Resource):
         receive = request.get_json()
 
         if receive is None or 'id' not in receive.keys():
-            return {'Success' : False, 'Message' : 'Missing key "id" from the put request'}
+            return {'Success' : False, 'Message' : 'Missing key "id" from the put request'}, 200
 
         # filter the received json to ensure that only the valid info can be added to the database
         valid_receive_dict = {key : value for key, value in receive.items() if key in TaskTable.getEditableColumns()}
         if len(valid_receive_dict) == 0:
-            return {'Success' : False, 'Message' : 'Missing updating parameters from the put request'}
+            return {'Success' : False, 'Message' : 'Missing updating parameters from the put request'}, 200
 
         # query and update the task table
         updated_count = TaskTable.query.filter_by(id=receive['id']).update(valid_receive_dict)
         if updated_count == 0:        
-            return {'Success' : False, 'Message' : 'There is no task data where id = %i ' % receive['id']}
+            return {'Success' : False, 'Message' : 'There is no task data where id = %i ' % receive['id']}, 200
 
         db.session.commit()
 
         task_table = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(id=receive['id'])))
 
-        return {'Success' : True, 'Modified-Data' : task_table}
+        return {'Success' : True, 'ModifiedData' : task_table}
 
     def delete(self):
         # json received from delete request
         receive = request.get_json()
 
         if receive is None or 'id' not in receive.keys():
-            return {'Success' : False, 'Message' : 'Missing key "id" from the delete request'}
+            return {'Success' : False, 'Message' : 'Missing key "id" from the delete request'}, 200
         
+        task_table = list(map(lambda x: x.toJSON(), TaskTable.query.filter_by(id=receive['id'])))[::-1]
         TaskTable.query.filter_by(id=receive['id']).delete()
         db.session.commit()
 
-        return {'Success' : True}
+        return {'Success' : True, 'DeletedTask' : task_table}, 200
 
 
 @app.after_request

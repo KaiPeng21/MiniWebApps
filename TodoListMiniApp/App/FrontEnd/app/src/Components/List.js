@@ -11,26 +11,44 @@ class List extends Component{
                         <Panel.Title componentClass="h3">{this.props.title}</Panel.Title>
                     </Panel.Heading>
                     <Panel.Body>
-                        <div style={{color: 'gray'}}>{this.props.add_date}</div> <br />
+                        <div style={{color: 'gray'}}>{this.props.add_time}</div> <br />
                         {this.props.description} 
-                        <div style={{margin: '2px', float:'right'}}><Button bsStyle="info" > <Glyphicon glyph="ok" /> Complete</Button></div>
-                        <div style={{margin: '2px', float:'right'}}><Button bsStyle="warning" ><Glyphicon glyph="remove" /> Remove</Button></div>
+                        <div style={{margin: '2px', float:'right'}}>
+                            <Button bsStyle={this.props.complete? 'info' : 'success'} onClick={() => {
+                                this.props.completeHandle({'id' : this.props.id, 'complete' : !this.props.complete})
+                            }}> 
+                                <Glyphicon glyph={this.props.complete? 'remove-sign' : 'ok-sign'} /> Mark as {this.props.complete? 'Incomplete' : 'Complete'}
+                            </Button>
+                        </div>
+                        <div style={{margin: '2px', float:'right'}}>
+                            <Button bsStyle="warning" onClick={()=> 
+                                this.props.removeHandle({'data' : {'id' : this.props.id}
+                            })}>
+                                <Glyphicon glyph="floppy-remove" /> Remove
+                            </Button>
+                        </div>
                     </Panel.Body>
                 </Panel>)
     }
 
 }
 List.propTypes = {
+    id : PropTypes.any,
     title : PropTypes.string.isRequired,
     description : PropTypes.string,
     add_date : PropTypes.string,
-    complete : PropTypes.bool.isRequired
+    complete : PropTypes.bool.isRequired,
+    removeHandle : PropTypes.func.isRequired,
+    completeHandle : PropTypes.func.isRequired
 }
 List.defaultProps = {
+    id : 'noid',
     title : '[Empty Title]',
     description : '[No Description]',
     add_date : '',
-    complete : false
+    complete : false,
+    removeHandle : ()=>{},
+    completeHandle : ()=>{}
 }
 
 export default List
