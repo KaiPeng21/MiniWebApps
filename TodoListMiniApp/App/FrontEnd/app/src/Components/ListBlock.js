@@ -6,7 +6,7 @@ import List from './List.js'
 class ListBlock extends Component{
 
     render(){
-        return(<div style={{marginLeft : '20px', marginRight: '20px'}}>
+        return(<div style={{marginLeft : '20px', marginRight: '20px', marginTop: '10px'}}>
             {this.props.todolist.map((item, ind) => <List key={ind} {...item} removeHandle={this.props.removeHandle} completeHandle={this.props.completeHandle}/>)}
         </div>)
     }

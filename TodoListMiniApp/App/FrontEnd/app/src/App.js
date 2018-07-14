@@ -5,6 +5,7 @@ import axios from 'axios'
 
 import AddToDoField from './Components/AddToDoField.js'
 import ListBlock from './Components/ListBlock.js'
+import { Tabs, Tab } from 'react-bootstrap';
 
 class App extends Component {
 
@@ -13,7 +14,7 @@ class App extends Component {
 
     this.api_base_uri = 'http://localhost:5000/task'
 
-    // initialize complete and incomplete tasks
+    // initialize complete and incomplete tasks as associative arrays
     this.state = {
       complete_tasks : [],
       incomplete_tasks : []
@@ -26,23 +27,33 @@ class App extends Component {
     this.httpDeleteHandle = this.httpDeleteHandle.bind(this)
   }
 
+  // fetch the complete/incomplete tasks from the database through an http get request
+  // right before the App component is mounted
   componentWillMount(){
     this.httpGetHandle('complete_tasks', '?complete=true')
     this.httpGetHandle('incomplete_tasks', '?complete=false')
   }
 
+  // send a get request to the api
+  // response_state_var : the state variable (complete_tasks or incomplete tasks) that holds the get request response
+  // query : http get request query
   httpGetHandle(response_state_var, query){
 
    axios.get(this.api_base_uri + query)
    .then(response => { 
     
+    // format the get request respoonse as in an associative array using the reduce method
+    // []
+    // [{'id01' : object01}]
+    // [{'id01' : object01}, {'id02' : object02}]
+    // ....
       var associativeTask = response.data.Tasks.reduce((accum, curr) => { 
         accum[curr['id']] = curr;
         return accum;
       }, [])
 
+      // update the state variable
       this.setState({
-        //[response_state_var] : response.data.Tasks
         [response_state_var] : associativeTask
       })
 
@@ -52,6 +63,7 @@ class App extends Component {
 
   }
 
+  // send a post request to the api
   httpPostHandle(request){
 
     /*
@@ -63,6 +75,7 @@ class App extends Component {
     axios.post(this.api_base_uri, request)
     .then(response => {
 
+      // update the state variable (a new set of data has been inserted to the incomplete list)
       this.setState((prevState, props) => {
         var copy = prevState.incomplete_tasks.slice()
         copy[response.data.InsertedData['id']] = response.data.InsertedData
@@ -74,15 +87,21 @@ class App extends Component {
     })
   }
 
+  // send an http put request to the api
   httpPutHandle(request){
     
     axios.put(this.api_base_uri, request)
     .then(response => {
+
       var modifiedObj = response.data.ModifiedData[0]
+      
+      // update the state variables that hold the complete/incomplete tasks
       this.setState((prevState, props) => {
         var copy_complete = prevState.complete_tasks.slice()
         var copy_incomplete = prevState.incomplete_tasks.slice()
 
+        // if a task is to be completed, remove it from the incomplete list, and add to the complete list
+        // and vice versa
         if (modifiedObj.complete){
           delete copy_incomplete[modifiedObj.id]
           copy_complete[modifiedObj.id] = modifiedObj
@@ -100,21 +119,23 @@ class App extends Component {
 
   }
 
+  // send an http delete request to the api
   httpDeleteHandle(request){
 
     axios.delete(this.api_base_uri, request)
     .then(response => {
-      var iscomplete = response.data.DeletedTask['complete']
-      var id = response.data.DeletedTask['id']
+
       this.setState((prevState, props) => {
         
+        // delete the object from either the complete list or the incomplete list
         var respondObj = response.data.DeletedTask[0]
+        var copy = []
         if (respondObj.complete){
-          var copy = prevState.complete_tasks.slice()
+          copy = prevState.complete_tasks.slice()
           delete copy[respondObj.id]
           return {complete_tasks : copy}
         } else {
-          var copy = prevState.incomplete_tasks.slice()
+          copy = prevState.incomplete_tasks.slice()
           delete copy[respondObj.id]
           return {incomplete_tasks : copy}
         }
@@ -122,12 +143,22 @@ class App extends Component {
     })
   }
 
+  // render the app front end
   render () {
     return (
-      <div className='button__container'>
+      <div>
+        
         <AddToDoField add_event_handle={this.httpPostHandle}/>
-        <ListBlock todolist={this.state.complete_tasks} removeHandle={this.httpDeleteHandle} completeHandle={this.httpPutHandle}/>
-        <ListBlock todolist={this.state.incomplete_tasks} removeHandle={this.httpDeleteHandle} completeHandle={this.httpPutHandle}/>
+        <div style={{marginLeft : '20px', marginRight : '20px'}}>
+        <Tabs defaultActiveKey={1} id="tabs" animation={false} >
+          <Tab eventKey={1} title="Incomplete Task">
+            <ListBlock todolist={this.state.incomplete_tasks} removeHandle={this.httpDeleteHandle} completeHandle={this.httpPutHandle}/>      
+          </Tab>
+          <Tab eventKey={2} title="Complete Task">
+            <ListBlock todolist={this.state.complete_tasks} removeHandle={this.httpDeleteHandle} completeHandle={this.httpPutHandle}/>
+          </Tab>
+        </Tabs>
+        </div>
       </div>
     )
   }

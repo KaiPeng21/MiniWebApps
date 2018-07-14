@@ -16,6 +16,8 @@ class AddToDoField extends Component{
 
     render(){
         return (<div style={{margin : '20px'}}>
+                <h1>Todo List App</h1>
+                <h3>Add a new event here</h3>
                 <FormGroup controlId="formValidationNull" validationState={null} >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl type="text" placeholder="Event Title" 
