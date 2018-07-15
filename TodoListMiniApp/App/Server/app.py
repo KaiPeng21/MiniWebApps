@@ -103,7 +103,11 @@ class Task(Resource):
             db.session.add(signature)
             db.session.commit()
 
+<<<<<<< HEAD
             return {'Success' : True, 'InsertedData' : signature.toJSON()}, 200
+=======
+            return {'Success' : True, 'InsertedData' : signature.toJSON()}
+>>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
         
         return {'Success' : False, 'Message' : 'No valid data was sent from the post request'}, 200
 
