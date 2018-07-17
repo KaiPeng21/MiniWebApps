@@ -14,10 +14,7 @@ class App extends Component {
 
     this.api_base_uri = 'http://localhost:5000/task'
 
-<<<<<<< HEAD
     // initialize complete and incomplete tasks as associative arrays
-=======
->>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
     this.state = {
       complete_tasks : [],
       incomplete_tasks : []
@@ -28,7 +25,6 @@ class App extends Component {
     this.httpPostHandle = this.httpPostHandle.bind(this)
     this.httpPutHandle = this.httpPutHandle.bind(this)
     this.httpDeleteHandle = this.httpDeleteHandle.bind(this)
-<<<<<<< HEAD
   }
 
   // fetch the complete/incomplete tasks from the database through an http get request
@@ -59,26 +55,6 @@ class App extends Component {
       // update the state variable
       this.setState({
         [response_state_var] : associativeTask
-=======
-  }
-
-  componentWillMount(){
-    this.httpGetHandle('complete_tasks', '?complete=true')
-    this.httpGetHandle('incomplete_tasks', '?complete=false')
-  }
-
-  componentWillUpdate(){
-
-  }
-
-  httpGetHandle(response_state_var, query){
-
-   axios.get(this.api_base_uri + query)
-   .then(response => { 
-      
-      this.setState({
-        [response_state_var] : response.data.Tasks
->>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
       })
 
     }).catch((error) => {
@@ -87,10 +63,7 @@ class App extends Component {
 
   }
 
-<<<<<<< HEAD
   // send a post request to the api
-=======
->>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
   httpPostHandle(request){
 
     /*
@@ -101,7 +74,6 @@ class App extends Component {
 
     axios.post(this.api_base_uri, request)
     .then(response => {
-<<<<<<< HEAD
 
       // update the state variable (a new set of data has been inserted to the incomplete list)
       this.setState((prevState, props) => {
@@ -110,21 +82,11 @@ class App extends Component {
         return {incomplete_tasks : copy}
       })
 
-=======
-      //console.log(response.data.InsertedData)
-      //console.log(this.state.incomplete_tasks)
-      this.setState((prevState, props) =>{
-        var copy = prevState.incomplete_tasks.slice()
-        copy.push(response.data.InsertedData)
-        return {incomplete_tasks : copy}  
-      })    
->>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
     }).catch((error) => {
       console.log(error);
     })
   }
 
-<<<<<<< HEAD
   // send an http put request to the api
   httpPutHandle(request){
     
@@ -162,13 +124,6 @@ class App extends Component {
 
     axios.delete(this.api_base_uri, request)
     .then(response => {
-=======
-  httpPutHandle(){
-
-  }
-
-  httpDeleteHandle(){
->>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
 
       this.setState((prevState, props) => {
         
@@ -191,7 +146,6 @@ class App extends Component {
   // render the app front end
   render () {
     return (
-<<<<<<< HEAD
       <div>
         
         <AddToDoField add_event_handle={this.httpPostHandle}/>
@@ -205,12 +159,6 @@ class App extends Component {
           </Tab>
         </Tabs>
         </div>
-=======
-      <div className='button__container'>
-        <AddToDoField add_event_handle={this.httpPostHandle}/>
-        <ListBlock todolist={this.state.complete_tasks}/>
-        <ListBlock todolist={this.state.incomplete_tasks}/>
->>>>>>> fa5c1bc30acf10e8d2c50237b2456ad8539d0fb6
       </div>
     )
   }
