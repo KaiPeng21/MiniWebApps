@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {Table, Button, Glyphicon} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 import SortButton from './SortButton';
 
 
@@ -9,9 +9,9 @@ class StandingTable extends Component{
     render(){
 
         return (<div>
-            <h2>{this.props.conference}</h2>
+            <h2>{this.props.conference}ERN CONFERENCE STANDING</h2>
             <Table striped bordered condensed hover>
-                <thead>
+                <thead style={{backgroundColor : 'lightblue'}}>
                     <tr>
                         {this.props.heading.map((val, ind) => {
                             return <th key={ind}>{val}<SortButton sortHandle={this.props.sortHandle} conference={this.props.conference} columnID={ind}/></th>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-
 import fetchJsonp from 'fetch-jsonp';
-
+import {Tabs, Tab} from 'react-bootstrap';
 import StandingTable from './Component/StandingTable';
 
 const nbaStandingBaseURL = 'http://stats.nba.com/stats/scoreboard/?LeagueID=00&DayOffset=0&GameDate=';
@@ -127,10 +126,17 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
-        <StandingTable conference='EAST' heading={this.state.heading} body={this.state.easternConference} sortHandle={this.sortHandle}/>
-        <StandingTable conference='WEST' heading={this.state.heading} body={this.state.westernConference} sortHandle={this.sortHandle}/>
-      </div>
+      <div className="App" style={{margin : '20px'}}>
+        <h1>NBA Standing</h1><br/>
+        <Tabs defaultActiveKey={1} animation={false} id='conference-tabs'>
+          <Tab eventKey={1} title='EAST'>
+            <StandingTable conference='EAST' heading={this.state.heading} body={this.state.easternConference} sortHandle={this.sortHandle}/>
+          </Tab>
+          <Tab eventKey={2} title='WEST'>
+            <StandingTable conference='WEST' heading={this.state.heading} body={this.state.westernConference} sortHandle={this.sortHandle}/>
+          </Tab>
+        </Tabs>
+              </div>
     );
   }
 }
