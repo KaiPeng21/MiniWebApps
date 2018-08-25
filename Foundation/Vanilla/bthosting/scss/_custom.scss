@@ -120,3 +120,22 @@
         }
     }
 }
+
+// domain search
+.domain-search{
+    background: $light-gray;
+    padding: 30px 20px 20px 20px;
+    border-bottom: 2px #ccc solid;
+    margin-bottom: 30px;
+
+    .domain-form{
+        input, .input-group-label{
+            border-color: $medium($light-gray);
+        }
+    }
+}
+
+// home packages
+.home-packages{
+    
+}
