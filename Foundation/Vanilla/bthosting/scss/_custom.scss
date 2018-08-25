@@ -1,0 +1,122 @@
+
+// Top Nav
+.top-nav{
+    width: 100%;
+    background: $dark-gray;
+    padding: 0;
+    margin: 0;
+    .top-list{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        overflow: hidden;
+
+        li{
+            list-style: none;
+            float: left;
+            padding: 10px 15px;
+            color: $white;
+            font-size: 13px;
+        }
+
+        li:first-child{
+            padding-left: 0;
+        }
+
+        li i {
+            padding-right: 8px;
+        }
+    }
+
+    .top-list-right{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        overflow: hidden;
+        float: right;
+
+        li{
+            list-style: none;
+            float: left;
+            padding: 10px 15px;
+            color: $white;
+            font-size: 13px;
+        }
+
+        a{
+            color: $white;
+        }
+    }
+}
+
+// Top Bar
+.top-bar{
+    color: $white;
+
+    span{
+        color: lighten($primary, 30%);
+        background: $dark-gray;
+        padding: 5px 9px;
+        margin-right: 4px;
+        border: $light-gray;
+    }
+
+    li{
+        text-transform: uppercase;
+    }
+
+    a {
+        color: $white;
+    }
+
+    a:hover{
+        color: $secondary;
+    }
+
+    a.current{
+        color: $secondary;
+        border-bottom: 3px solid $secondary;
+    }
+}
+
+// showcase box
+.showcase{
+    background: url('../img/background.jpg') no-repeat -100px 0;
+    min-height: 450px;
+    color: $white;
+
+    .showcase-box{
+        padding: 20px 30px;
+        margin-top: 30px;
+        background: $primary;
+        color: $white;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+
+        p{
+            border-bottom: 1px #ccc solid;
+            padding-bottom: 10px;
+        }
+    }
+
+    .showcase-box-bottom{
+        background: $secondary;
+        color: $white;
+        padding: 10px 30px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+
+        .pricing span{
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .start-link{
+            padding-top: 20px;
+
+            a{
+                color: #fff;
+            }
+        }
+    }
+}
